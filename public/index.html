@@ -11,6 +11,32 @@
       crossorigin="anonymous"
     />
     <title>Debounce Rest API</title>
+    <style>
+      .lds-dual-ring {
+        display: inline-block;
+        width: 80px;
+        height: 80px;
+      }
+      .lds-dual-ring:after {
+        content: " ";
+        display: block;
+        width: 64px;
+        height: 64px;
+        margin: 8px;
+        border-radius: 50%;
+        border: 6px solid #0d6efd;
+        border-color: #0d6efd transparent #0d6efd transparent;
+        animation: lds-dual-ring 1.2s linear infinite;
+      }
+      @keyframes lds-dual-ring {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
   </head>
   <body>
     <main class="container mt-4">
@@ -22,41 +48,28 @@
           </div>
         </div>
       </div>
+      <div class="row">
+        <div class="col d-flex justify-content-center">
+          <div class="lds-dual-ring mt-4" id="spinner"></div>
+        </div>
+      </div>
       <div class="row mt-4" id="users"></div>
     </main>
     <script>
-      const users = [
-        {
-          id: "6c838e70-b496-4076-a517-c5dc39d26441",
-          name: "Felipe Botsford",
-          address: "14070 Cremin Rapid",
-        },
-        {
-          id: "c8c8fa6d-94ec-4584-a8c8-330279c3dffc",
-          name: "Noel Block",
-          address: "75317 Rowe Bypass",
-        },
-        {
-          id: "8914c566-c76a-41ce-a42b-2a2ef9c25218",
-          name: "Daryl Gulgowski",
-          address: "99459 Medhurst Camp",
-        },
-        {
-          id: "8914c566-c76a-41ce-a42b-2a2ef9c25218",
-          name: "Daryl Gulgowski",
-          address: "99459 Medhurst Camp",
-        },
-        {
-          id: "8914c566-c76a-41ce-a42b-2a2ef9c25218",
-          name: "Daryl Gulgowski",
-          address: "99459 Medhurst Camp",
-        },
-        {
-          id: "8914c566-c76a-41ce-a42b-2a2ef9c25218",
-          name: "Daryl Gulgowski",
-          address: "99459 Medhurst Camp",
-        },
-      ];
+      let isFetching = false;
+      const spinner = document.getElementById("spinner");
+
+      const fetchUser = async (q = "") => {
+        try {
+          const path = !q ? "/api/users" : `/api/users?q=${q}`;
+          const res = await fetch(path);
+          const user = await res.json();
+          return user;
+        } catch (err) {
+          console.error(err);
+          return [];
+        }
+      };
 
       function renderUsers(users) {
         let innerHTML = "";
@@ -78,7 +91,10 @@
         const { value } = e.target;
       });
 
-      renderUsers(users);
+      fetchUser().then((users) => {
+        renderUsers(users);
+        spinner.style.display = "none";
+      });
     </script>
   </body>
 </html>
