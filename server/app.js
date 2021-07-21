@@ -3,6 +3,7 @@ const faker = require('faker')
 const fs = require('fs')
 const PORT = 8080
 
+// generate random for single user
 const generateRandomUser = () => {
   return {
     id: faker.datatype.uuid(),
@@ -10,7 +11,8 @@ const generateRandomUser = () => {
     address: faker.address.streetAddress()
   }
 }
-const initialItems = [...Array(100)].map(() => generateRandomUser());
+// generate 1000 items to single array
+const initialItems = [...Array(1000)].map(() => generateRandomUser());
 
 app.get('/', (_, res) => {
   const html = fs.readFileSync('public/index.html').toString('utf-8')
