@@ -56,9 +56,6 @@
       <div class="row mt-4" id="users"></div>
     </main>
     <script>
-      let isFetching = false;
-      const spinner = document.getElementById("spinner");
-
       const fetchUser = async (q = "") => {
         try {
           const path = !q ? "/api/users" : `/api/users?q=${q}`;
@@ -86,6 +83,7 @@
       }
 
       const input = document.getElementById("input-search");
+      const spinner = document.getElementById("spinner");
 
       input.addEventListener("input", (e) => {
         const { value } = e.target;
