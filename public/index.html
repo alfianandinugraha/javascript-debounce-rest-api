@@ -18,7 +18,7 @@
         <div class="col col-xl-4">
           <h3 class="mb-2">Search user</h3>
           <div>
-            <input type="text" class="form-control" />
+            <input type="text" class="form-control" id="input-search" />
           </div>
         </div>
       </div>
@@ -71,6 +71,12 @@
         });
         document.getElementById("users").innerHTML = innerHTML;
       }
+
+      const input = document.getElementById("input-search");
+
+      input.addEventListener("input", (e) => {
+        const { value } = e.target;
+      });
 
       renderUsers(users);
     </script>
