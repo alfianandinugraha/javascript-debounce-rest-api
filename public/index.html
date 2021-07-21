@@ -56,6 +56,16 @@
       <div class="row mt-4" id="users"></div>
     </main>
     <script>
+      const debounce = (fn, delay = 500) => {
+        let timer;
+        return () => {
+          clearTimeout(timer);
+          timer = setTimeout(() => {
+            fn();
+          }, delay);
+        };
+      };
+
       const fetchUser = async (q = "") => {
         try {
           const path = !q ? "/api/users" : `/api/users?q=${q}`;
@@ -68,6 +78,7 @@
         }
       };
 
+      // render user to screen
       function renderUsers(users) {
         let innerHTML = "";
         users.forEach((user) => {
@@ -85,10 +96,24 @@
       const input = document.getElementById("input-search");
       const spinner = document.getElementById("spinner");
 
+      // every user stop input it will wait for 500ms to fetch
+      // if user continuously input it will never fetch
+      const inputHandler = debounce(() => {
+        const { value } = input;
+
+        fetchUser(value).then((users) => {
+          renderUsers(users);
+          spinner.style.display = "none";
+        });
+      }, 500);
+
       input.addEventListener("input", (e) => {
-        const { value } = e.target;
+        spinner.style.display = "block";
+        document.getElementById("users").innerHTML = "";
+        inputHandler();
       });
 
+      // fetch user for first time
       fetchUser().then((users) => {
         renderUsers(users);
         spinner.style.display = "none";
