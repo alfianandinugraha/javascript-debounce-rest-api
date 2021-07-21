@@ -15,6 +15,7 @@ const initialItems = [...Array(100)].map(() => generateRandomUser());
 app.get('/', (_, res) => {
   const html = fs.readFileSync('public/index.html').toString('utf-8')
   res.write(html)
+  res.end()
 })
 
 app.get('/api/users', (req, res) => {
